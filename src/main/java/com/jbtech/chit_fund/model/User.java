@@ -1,10 +1,8 @@
 package com.jbtech.chit_fund.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Data
@@ -16,4 +14,17 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String role; // e.g., "admin", "user"
+    private String phoneNumber;
+    private String address;
+    private String city;
+    private String state;
+    private String isActive; // "Y" for active, "N" for inactive
+    private String createdBy;
+
+    @CreationTimestamp
+    private String createdAt;
+
+    @Version
+    private Integer version;
    }
