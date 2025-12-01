@@ -1,5 +1,6 @@
 package com.jbtech.chit_fund.controller;
 
+import com.jbtech.chit_fund.exception.ResourceNotFoundException;
 import com.jbtech.chit_fund.model.User;
 import com.jbtech.chit_fund.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,23 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+        User user = userService.getUserById(id);
+        if(user != null) {
+            return user;
+        }else {
+            throw new ResourceNotFoundException("User not available");
+        }
+
+    }
+    @GetMapping("/findByEmail/{email}")
+    public User findByEmail(@PathVariable String email) {
+        User user = userService.findByEmail(email);
+        if(user != null) {
+            return user;
+        }else {
+            throw new ResourceNotFoundException("User not available");
+        }
+
     }
 
     @PostMapping
