@@ -1,5 +1,7 @@
 package com.jbtech.chit_fund.service;
 
+import com.jbtech.chit_fund.dto.ChitGroupDTO;
+import com.jbtech.chit_fund.dto.ChitGroupMapper;
 import com.jbtech.chit_fund.exception.ResourceNotFoundException;
 import com.jbtech.chit_fund.model.ChitGroup;
 import com.jbtech.chit_fund.repository.ChitGroupRepository;
@@ -8,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ChitGroupServiceImpl implements ChitGroupService {
@@ -23,9 +27,19 @@ public class ChitGroupServiceImpl implements ChitGroupService {
     }
 
     @Override
-    public ChitGroup createChitGroup(ChitGroup chitGroup) {
+    public ChitGroup createChitGroup(ChitGroupDTO chitGroup) {
         logger.info("Creating a new ChitGroup: {}", chitGroup);
-        return chitGroupRepository.save(chitGroup);
+        ChitGroup entity = ChitGroup.builder()
+                .sumAssured(chitGroup.getSumAssured())
+                .chitGroupName(chitGroup.getChitGroupName())
+                .groupId(chitGroup.getId())
+                .startDate(chitGroup.getStartDate())
+                .premium(chitGroup.getPremium())
+                .isActive("YES")
+                .duration(chitGroup.getTerm())
+                .build();
+
+        return chitGroupRepository.save(entity);
     }
 
     @Override
@@ -39,31 +53,36 @@ public class ChitGroupServiceImpl implements ChitGroupService {
     }
 
     @Override
-    public List<ChitGroup> getAllChitGroups() {
+    public List<ChitGroupDTO> getAllChitGroups() {
         logger.info("Fetching all ChitGroups");
-        return chitGroupRepository.findAll();
+
+         List<ChitGroup> entities =  chitGroupRepository.findAll();
+        return entities.stream()
+                 .map(ChitGroupMapper::fetchChitGroups)
+                 .collect(Collectors.toList());
+
     }
 
-    @Override
-    public ChitGroup updateChitGroup(Long id, ChitGroup chitGroup) {
-        logger.info("Updating ChitGroup with id: {}", id);
-        return chitGroupRepository.findById(id)
-                .map(existingChitGroup -> {
-                    logger.debug("Existing ChitGroup: {}", existingChitGroup);
-                    existingChitGroup.setName(chitGroup.getName());
-                    existingChitGroup.setAmount(chitGroup.getAmount());
-                    existingChitGroup.setDuration(chitGroup.getDuration());
-                    existingChitGroup.setStartDate(chitGroup.getStartDate());
-                    existingChitGroup.setIsActive(chitGroup.getIsActive());
-                    ChitGroup updatedChitGroup = chitGroupRepository.save(existingChitGroup);
-                    logger.info("Updated ChitGroup: {}", updatedChitGroup);
-                    return updatedChitGroup;
-                })
-                .orElseThrow(() -> {
-                    logger.error("ChitGroup not found with id: {}", id);
-                    return new ResourceNotFoundException("ChitGroup not found with id: " + id);
-                });
-    }
+//    @Override
+//    public ChitGroup updateChitGroup(Long id, ChitGroup chitGroup) {
+//        logger.info("Updating ChitGroup with id: {}", id);
+//        return chitGroupRepository.findById(id)
+//                .map(existingChitGroup -> {
+//                    logger.debug("Existing ChitGroup: {}", existingChitGroup);
+//                    existingChitGroup.setName(chitGroup.getName());
+//                    existingChitGroup.setAmount(chitGroup.getAmount());
+//                    existingChitGroup.setDuration(chitGroup.getDuration());
+//                    existingChitGroup.setStartDate(chitGroup.getStartDate());
+//                    existingChitGroup.setIsActive(chitGroup.getIsActive());
+//                    ChitGroup updatedChitGroup = chitGroupRepository.save(existingChitGroup);
+//                    logger.info("Updated ChitGroup: {}", updatedChitGroup);
+//                    return updatedChitGroup;
+//                })
+//                .orElseThrow(() -> {
+//                    logger.error("ChitGroup not found with id: {}", id);
+//                    return new ResourceNotFoundException("ChitGroup not found with id: " + id);
+//                });
+//    }
 
     @Override
     public void deleteChitGroup(Long id) {

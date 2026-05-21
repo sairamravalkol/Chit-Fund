@@ -31,6 +31,11 @@ public class UserController {
         ));
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<?> getHello(){
+        return ResponseEntity.ok("Hello Hero I'm Here to help you");
+    }
+
     @GetMapping("/admin/users")
     @PreAuthorize("hasRole('ADMIN')")   // 🔒 Admin only
     public ResponseEntity<?> getAllUsers() {
