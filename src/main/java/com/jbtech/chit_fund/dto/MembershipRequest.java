@@ -1,34 +1,21 @@
 package com.jbtech.chit_fund.dto;
 
-import java.time.LocalDateTime;
+import lombok.Builder;
+import lombok.Data;
 
+import java.time.LocalDate;
+
+@Data
+@Builder
 public class MembershipRequest {
+
     private Long userId;
-    private Long chitGroupId;
-    private LocalDateTime joinedAt;
+    private Long subscriberId;
+    private String subscriberName;
+    private String chitGroupName;
+    private String chitGroupId;
+    private String premium;
+    private String agentName;
+    private LocalDate joinedAt;
 
-    // Getters and Setters
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getChitGroupId() {
-        return chitGroupId;
-    }
-
-    public void setChitGroupId(Long chitGroupId) {
-        this.chitGroupId = chitGroupId;
-    }
-
-    public LocalDateTime getJoinedAt() {
-        return joinedAt;
-    }
-
-    public void setJoinedAt(LocalDateTime joinedAt) {
-        this.joinedAt = joinedAt;
-    }
 }

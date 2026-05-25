@@ -1,8 +1,9 @@
-package com.jbtech.chit_fund.service;
+package com.jbtech.chit_fund.service.impl;
 
 import com.jbtech.chit_fund.exception.ResourceNotFoundException;
 import com.jbtech.chit_fund.model.Payment;
 import com.jbtech.chit_fund.repository.PaymentRepository;
+import com.jbtech.chit_fund.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

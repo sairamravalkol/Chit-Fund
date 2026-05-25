@@ -1,11 +1,13 @@
-package com.jbtech.chit_fund.service;
+package com.jbtech.chit_fund.service.impl;
 
 import com.jbtech.chit_fund.dto.MembershipRequest;
 import com.jbtech.chit_fund.exception.ResourceNotFoundException;
 import com.jbtech.chit_fund.model.ChitGroup;
 import com.jbtech.chit_fund.model.Membership;
+import com.jbtech.chit_fund.model.SubscriberEntity;
 import com.jbtech.chit_fund.repository.ChitGroupRepository;
 import com.jbtech.chit_fund.repository.MembershipRepository;
+import com.jbtech.chit_fund.repository.SubscriberRepository;
 import com.jbtech.chit_fund.service.MembershipService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,21 +23,31 @@ public class MembershipServiceImpl implements MembershipService {
 
     private final MembershipRepository membershipRepository;
     private final ChitGroupRepository chitGroupRepository;
+    private final SubscriberRepository subscriberRepository;
 
-    public MembershipServiceImpl(MembershipRepository membershipRepository, ChitGroupRepository chitGroupRepository) {
+    public MembershipServiceImpl(MembershipRepository membershipRepository, ChitGroupRepository chitGroupRepository, SubscriberRepository subscriberRepository) {
         this.membershipRepository = membershipRepository;
         this.chitGroupRepository = chitGroupRepository;
+        this.subscriberRepository = subscriberRepository;
     }
 
 
 
     @Override
     public Membership createMembership(MembershipRequest membershipRequest) {
-        ChitGroup chitGroup = chitGroupRepository.findById(membershipRequest.getChitGroupId())
+        ChitGroup chitGroup = chitGroupRepository.findByGroupId(membershipRequest.getChitGroupId())
                 .orElseThrow(() -> new ResourceNotFoundException("ChitGroup not found with id: " + membershipRequest.getChitGroupId()));
+        SubscriberEntity subscriberEntity = subscriberRepository.findByFirstNameAndLastName(membershipRequest.getSubscriberName().split(" ")[0], membershipRequest.getSubscriberName().split(" ")[1])
+                .orElseThrow(() -> new ResourceNotFoundException("Subscriber not found with name: " + membershipRequest.getSubscriberName()));
 
         Membership membership = new Membership();
         membership.setUserId(membershipRequest.getUserId());
+        membership.setPremium(membershipRequest.getPremium());
+        membership.setAgentName(membershipRequest.getAgentName());
+        membership.setSubscriber(subscriberEntity);
+        membership.setSubscriberName(membershipRequest.getSubscriberName());
+        membership.setPremium(membershipRequest.getPremium());
+
         membership.setChitGroup(chitGroup);
         membership.setJoinedAt(membershipRequest.getJoinedAt());
 

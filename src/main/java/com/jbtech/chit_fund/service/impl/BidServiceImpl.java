@@ -1,10 +1,11 @@
-package com.jbtech.chit_fund.service;
+package com.jbtech.chit_fund.service.impl;
 
 import com.jbtech.chit_fund.exception.ResourceNotFoundException;
 import com.jbtech.chit_fund.model.Bid;
 import com.jbtech.chit_fund.model.ChitGroup;
 import com.jbtech.chit_fund.repository.BidRepository;
 import com.jbtech.chit_fund.repository.ChitGroupRepository;
+import com.jbtech.chit_fund.service.BidService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

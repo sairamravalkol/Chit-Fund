@@ -1,4 +1,4 @@
-package com.jbtech.chit_fund.service;
+package com.jbtech.chit_fund.service.impl;
 
 import com.jbtech.chit_fund.dto.ChitGroupDTO;
 import com.jbtech.chit_fund.dto.ChitGroupMapper;
@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
