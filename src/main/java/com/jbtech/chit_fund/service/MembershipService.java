@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface MembershipService {
     Membership createMembership(MembershipRequest membershipRequest);
     Optional<Membership> getMembershipById(Long id);
-    List<Membership> getAllMemberships();
+    List<MembershipRequest> getAllMemberships();
     void deleteMembership(Long id);
 }

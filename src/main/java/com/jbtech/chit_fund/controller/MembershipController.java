@@ -34,8 +34,8 @@ public class MembershipController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Membership>> getAllMemberships() {
-        List<Membership> memberships = membershipService.getAllMemberships();
+    public ResponseEntity<List<MembershipRequest>> getAllMemberships() {
+        List<MembershipRequest> memberships = membershipService.getAllMemberships();
         return ResponseEntity.ok(memberships);
     }
 

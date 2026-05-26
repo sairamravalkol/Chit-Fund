@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jbtech</groupId>
-	<artifactId>chit-fund</artifactId>
+	<artifactId>chit-fund-services</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>chit-fund</name>
 	<description>Chits Managing System</description>

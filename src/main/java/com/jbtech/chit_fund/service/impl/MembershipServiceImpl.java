@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MembershipServiceImpl implements MembershipService {
@@ -66,9 +67,23 @@ public class MembershipServiceImpl implements MembershipService {
     }
 
     @Override
-    public List<Membership> getAllMemberships() {
+    public List<MembershipRequest> getAllMemberships() {
         logger.info("Fetching all Memberships");
-        return membershipRepository.findAll();
+
+        List<Membership> memberships = membershipRepository.findAll();
+        return memberships.stream()
+                .map(membership -> {
+
+                    return MembershipRequest.builder()
+                            .agentName(membership.getAgentName())
+                            .chitGroupId(membership.getChitGroup().getGroupId())
+                            .premium(membership.getPremium())
+                            .subscriberName(membership.getSubscriberName())
+                            .chitGroupName(membership.getChitGroup().getChitGroupName())
+                            .joinedAt(membership.getJoinedAt())
+                     .build();
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
