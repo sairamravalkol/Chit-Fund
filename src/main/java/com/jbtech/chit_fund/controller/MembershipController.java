@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,11 @@ public class MembershipController {
         Membership membership = membershipService.getMembershipById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Membership not found with id: " + id));
         return ResponseEntity.ok(membership);
+    }
+    @GetMapping("/{month}/{year}")
+    public ResponseEntity<List<MembershipRequest>> getMembershipsByJoinedAt(@PathVariable int month,@PathVariable int year) {
+        List<MembershipRequest> memberships = membershipService.getMembershipsByJoinedAt(month,year);
+        return ResponseEntity.ok(memberships);
     }
 
     @GetMapping

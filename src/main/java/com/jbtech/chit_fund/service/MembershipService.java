@@ -3,6 +3,7 @@ package com.jbtech.chit_fund.service;
 import com.jbtech.chit_fund.dto.MembershipRequest;
 import com.jbtech.chit_fund.model.Membership;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,4 +12,5 @@ public interface MembershipService {
     Optional<Membership> getMembershipById(Long id);
     List<MembershipRequest> getAllMemberships();
     void deleteMembership(Long id);
+    List<MembershipRequest> getMembershipsByJoinedAt(int month,int year);
 }

@@ -1,6 +1,7 @@
 package com.jbtech.chit_fund.service.impl;
 
 import com.jbtech.chit_fund.dto.MembershipRequest;
+import com.jbtech.chit_fund.exception.DublicateRecordException;
 import com.jbtech.chit_fund.exception.ResourceNotFoundException;
 import com.jbtech.chit_fund.model.ChitGroup;
 import com.jbtech.chit_fund.model.Membership;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,11 +38,14 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     public Membership createMembership(MembershipRequest membershipRequest) {
+
         ChitGroup chitGroup = chitGroupRepository.findByGroupId(membershipRequest.getChitGroupId())
                 .orElseThrow(() -> new ResourceNotFoundException("ChitGroup not found with id: " + membershipRequest.getChitGroupId()));
         SubscriberEntity subscriberEntity = subscriberRepository.findByFirstNameAndLastName(membershipRequest.getSubscriberName().split(" ")[0], membershipRequest.getSubscriberName().split(" ")[1])
                 .orElseThrow(() -> new ResourceNotFoundException("Subscriber not found with name: " + membershipRequest.getSubscriberName()));
-
+        if(membershipRepository.existsByChitGroupIdAndSubscriberNameAndJoinedAt(chitGroup.getId(),membershipRequest.getSubscriberName(),membershipRequest.getJoinedAt())) {
+            throw new DublicateRecordException("Membership already exists for the given ChitGroupId, SubscriberName, and JoinedAt");
+        }
         Membership membership = new Membership();
         membership.setUserId(membershipRequest.getUserId());
         membership.setPremium(membershipRequest.getPremium());
@@ -95,5 +100,25 @@ public class MembershipServiceImpl implements MembershipService {
         }
         membershipRepository.deleteById(id);
         logger.info("Deleted Membership with id: {}", id);
+    }
+
+    @Override
+    public List<MembershipRequest> getMembershipsByJoinedAt(int month,int year) {
+        logger.info("Fetching all Memberships by Joined month and year:{}", month+" "+year);
+
+        List<Membership> memberships = membershipRepository.findByMonthAndYear(month, year);
+        return memberships.stream()
+                .map(membership -> {
+
+                    return MembershipRequest.builder()
+                            .agentName(membership.getAgentName())
+                            .chitGroupId(membership.getChitGroup().getGroupId())
+                            .premium(membership.getPremium())
+                            .subscriberName(membership.getSubscriberName())
+                            .chitGroupName(membership.getChitGroup().getChitGroupName())
+                            .joinedAt(membership.getJoinedAt())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 }
