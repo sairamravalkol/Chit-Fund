@@ -1,6 +1,7 @@
 package com.jbtech.chit_fund.model;
 
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,16 +9,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "SUBSCRIBER")
+@Table(name = "subscriber")
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class SubscriberEntity {
+@AllArgsConstructor
+public class SubscriberEntity extends AuditColumns {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
     private Long id;
 
     @Column(name = "first_name", nullable = false)
@@ -73,5 +73,4 @@ public class SubscriberEntity {
 
     @Column(name = "nominee_phone", nullable = false)
     private Long nomineePhone;
-
 }
